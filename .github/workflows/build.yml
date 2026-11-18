@@ -1,0 +1,27 @@
+
+name: Build iOS Siri Patch
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure
+        run: cmake -B build-cmake
+
+      - name: Build Siri Patch
+        run: cmake --build build-cmake --target DisableSiriINPreferences
+
+      - name: Upload dylib
+        uses: actions/upload-artifact@v4
+        with:
+          name: DisableSiriINPreferences
+          path: build/DisableSiriINPreferences.dylib
